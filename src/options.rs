@@ -61,6 +61,10 @@ pub struct Opts {
     #[arg(short, long = "skip-samesize")]
     pub skipsamesize: bool,
 
+    /// Skip same size an existing file
+    #[arg(long = "errignore")]
+    pub errignore: bool,
+
     /// Use .gitignore if present. NOTE: This is fairly basic at the
     /// moment, and only honours a .gitignore in the directory root
     /// for directory copies; global or sub-directory ignores are

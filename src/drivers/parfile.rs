@@ -81,8 +81,12 @@ fn copy_worker(
                 // send back any errors as they may have occurred
                 // before the copy started..
                 let r = copy_file(&from, &to, opts, &mut updates);
-                if r.is_err() {
+                if let Err(e)=&r{
+                  if opts.errignore{
+                    error!("copy file err, but errignore is true. err={}",e);
+                  }else{
                     updates.update(r)?;
+                  }
                 }
             }
 
