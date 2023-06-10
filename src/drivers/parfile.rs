@@ -157,7 +157,7 @@ fn copy_source(
                     match meta_to.file_type().to_enum(){
                         FileType::File=>{
                             if meta.len()==meta_to.len(){
-                                info!("Skip copy becose same size: {:?} to {:?}", from, target);
+                                debug!("Skip copy becose same size: {:?} to {:?}", from, target);
                                 updates.update(Ok(meta.len()))?;
                                 work_tx.send(Operation::Skip(meta.len()))?;
                                 continue;
@@ -165,7 +165,7 @@ fn copy_source(
                         },
                         _=>{},
                     }
-                    info!("Not skip copy becose size:({}!={}), {:?} to {:?}", 
+                    debug!("Not skip copy becose size:({}!={}), {:?} to {:?}", 
                     meta.len(),meta_to.len(),from, target);
                 }
                 debug!("Send copy operation {:?} to {:?}", from, target);
