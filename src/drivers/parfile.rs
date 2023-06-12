@@ -162,6 +162,12 @@ fn copy_source(
                         FileType::File=>{
                             if meta.len()==meta_to.len(){
                                 debug!("Skip copy becose same size: {:?} to {:?}", from, target);
+                                if opts.rmsamesize{
+                                    match std::fs::remove_file(&from){
+                                        Ok(_) => debug!("Remove same size file success!!"),
+                                        Err(e) => error!("Remove same size file faild:{}!!",e),
+                                    }
+                                }
                                 updates.update(Ok(meta.len()))?;
                                 work_tx.send(Operation::Skip(meta.len()))?;
                                 continue;
@@ -184,8 +190,23 @@ fn copy_source(
             }
 
             FileType::Dir => {
-                debug!("Creating target directory {:?}", target);
-                create_dir_all(&target)?;
+                let mut isdef=true;
+                if opts.rmemptydir{
+                    match std::fs::read_dir(&from){
+                        Ok(mut v) => if let None = v.next(){
+                            isdef=false;
+                            match std::fs::remove_dir(&from){
+                                Ok(_) => debug!("Remove empty dir success!!"),
+                                Err(e) => error!("Remove empty dir faild:{}!!",e),
+                            }
+                        },
+                        Err(e) => error!("Remove empty dir err: {}!!!",e),
+                    }
+                }
+                if isdef {
+                    debug!("Creating target directory {:?}", target);
+                    create_dir_all(&target)?;
+                }
             }
 
             FileType::Unknown => {

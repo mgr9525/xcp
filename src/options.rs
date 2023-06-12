@@ -60,6 +60,10 @@ pub struct Opts {
     /// Skip same size an existing file
     #[arg(short, long = "skip-samesize")]
     pub skipsamesize: bool,
+    #[arg(long = "rm-samesize")]
+    pub rmsamesize: bool,
+    #[arg(long = "rm-emptydir")]
+    pub rmemptydir: bool,
 
     /// Skip same size an existing file
     #[arg(long = "errignore")]
